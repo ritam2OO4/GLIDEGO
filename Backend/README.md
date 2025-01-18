@@ -1,4 +1,3 @@
-
 <!-- Cmd+Shift+V for document view -->
 
 # User Authentication Module
@@ -6,16 +5,20 @@
 This project contains a user authentication module implemented with Node.js, Express, MongoDB, and related tools. It includes functionality for user registration, user login, password hashing, token generation, and validation.
 
 ## Features
+
 - **User Registration**
+
   - Validates user input using `express-validator`.
   - Hashes passwords using `bcrypt` before storing them.
   - Generates JWT tokens for authenticated users.
 
 - **User Login**
+
   - Authenticates users using email and password.
   - Issues JWT tokens upon successful authentication.
 
 - **Password Hashing**
+
   - Ensures secure storage of user passwords.
 
 - **JWT Token Generation**
@@ -24,6 +27,7 @@ This project contains a user authentication module implemented with Node.js, Exp
 ## Installation and Setup
 
 ### Prerequisites
+
 - Node.js (v14 or higher)
 - MongoDB (local or cloud instance)
 - A `.env` file containing the following environment variables:
@@ -33,13 +37,16 @@ This project contains a user authentication module implemented with Node.js, Exp
   ```
 
 ### Steps
+
 1. Clone the repository:
+
    ```bash
    git clone <repository_url>
    cd <project_directory>
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -52,6 +59,7 @@ This project contains a user authentication module implemented with Node.js, Exp
    ```
 
 ## Project Structure
+
 ```
 project_root/
 ├── Controllers/
@@ -68,15 +76,19 @@ project_root/
 ```
 
 ### Explanation
+
 1. **`userModel.js`**
+
    - Defines the Mongoose schema for users.
    - Implements methods for password hashing, token generation, and password comparison.
 
 2. **`authRoutes.js`**
+
    - Contains route definitions for user-related operations, such as registration and login.
    - Uses `express-validator` for input validation.
 
 3. **`userService.js`**
+
    - Contains a `createUser` function for creating new user records in the database.
 
 4. **`userController.js`**
@@ -86,6 +98,7 @@ project_root/
 ## API Endpoints
 
 ### POST `users/register`
+
 - **Description**: Registers a new user.
 - **Request Body**:
   ```json
@@ -99,6 +112,7 @@ project_root/
   }
   ```
 - **Validation**:
+
   - `firstName`: At least 3 characters.
   - `email`: Must be a valid email.
   - `password`: At least 8 characters.
@@ -129,6 +143,7 @@ project_root/
     ```
 
 ### POST `users/login`
+
 - **Description**: Logs in an existing user.
 - **Request Body**:
   ```json
@@ -138,6 +153,7 @@ project_root/
   }
   ```
 - **Validation**:
+
   - `email`: Must be a valid email.
   - `password`: Cannot be empty.
 
@@ -159,18 +175,18 @@ project_root/
   - **Failure**: 401 Unauthorized (Invalid credentials)
     ```json
     {
-      "errors": [
-        { "msg": "Invalid email or password" }
-      ]
+      "errors": [{ "msg": "Invalid email or password" }]
     }
     ```
 
 ## Error Handling
+
 - The module uses Express's error-handling middleware to catch and process unexpected errors.
 - Validation errors are returned with a 400 status code.
 - Authentication errors return a 401 status code.
 
 ## Dependencies
+
 - **Node.js**: JavaScript runtime environment.
 - **Express**: Web framework for building APIs.
 - **Mongoose**: ODM for MongoDB.
@@ -179,5 +195,5 @@ project_root/
 - **express-validator**: Middleware for request validation.
 
 ## License
-This project is licensed under the MIT License.
 
+This project is licensed under the MIT License.

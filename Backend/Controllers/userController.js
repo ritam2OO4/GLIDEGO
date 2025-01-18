@@ -13,6 +13,10 @@ module.exports.registerUser = async (req, res, next) => {
       }
   
       const { fullName, email, password } = req.body;
+      const userExists = await userModel.findOne({email});
+
+      if(userExists) return res.status(401).json({ errors: errors.array() });
+
       const hashPassword = await userModel.hashPassword(password);
       const user = await createUser({
         firstName:fullName.firstName,
@@ -51,16 +55,18 @@ module.exports.loginUser = async (req, res, next) => {
 
     } catch (error) {
       // Catch unexpected errors and handle them
-      next(error); // Pass the error to the Express error handler
+      res.status("201").json({message:"invalid email or passsword!!"})
     }
   };
 module.exports.getUserProfile= async(req,res,next)=>{
  res.status("200").json(req.user) 
 }
 module.exports.logoutuser= async(req,res,next)=>{
-  res.clearCookie("token")
   let token = req.cookies.token || req.headers.authorization?.split("")[1];
 
-    await blacklistTokenModel.create({token})
+  await blacklistTokenModel.create({token})
+
+
+  res.clearCookie("token")
 res.status("202").json({message:"logged Out!!"})
 }
