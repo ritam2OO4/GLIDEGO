@@ -37,7 +37,8 @@ module.exports.registerCaptain = async function (req, res, next) {
     // Save the captain using the service
     const captain = await captainService(captainData);
     // Respond with success
-    res.status(201).json({ message: "Captain registered successfully!", captain });
+    const token = captain.generateAuthToken();
+    res.status(201).json({ token, captain });
   } catch (error) {
     console.error("Error registering captain:", error.message);
     next(error); // Pass error to the global error handler
