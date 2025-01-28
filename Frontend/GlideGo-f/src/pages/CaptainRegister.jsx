@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import GlideGoPng from "../../public/GlideGoLogo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { captainDataContext } from "../context/captainContext";
 
 const CaptainRegister = () => {
+  const navigate = useNavigate();
+  const {captain , setCaptain} = useContext(captainDataContext)
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fullName:{
+      firstName: "",
+      lastName: "",
+    },
     email: "",
     password: "",
     status: "",
@@ -32,22 +38,44 @@ const CaptainRegister = () => {
       });
     }
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      fullName: {
-        firstName: "",
-        lastName: "",
-      },
-      email: "",
-      password: "",
-      status: "",
-      vehicleColor: "",
-      vehicleCapacity: "",
-      vehicleNumberPlate: "",
-      vehicleType: "",
-    });
+const captainData = {
+  fullName: {
+    firstName: formData.fullName.firstName,
+    lastName: formData.fullName.lastName,
+  },
+  email: formData.email,
+  password: formData.password,
+  status: formData.status,
+  vehicle:{
+    color: formData.vehicleColor,
+    capacity: formData.vehicleCapacity,
+    numberPlate: formData.vehicleNumberPlate,
+    vehicleType: formData.vehicleType,
+  },
+}
+
+const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`,captainData)
+     if(response.status === 201) {
+       setFormData({
+         fullName: {
+           firstName: "",
+           lastName: "",
+         },
+         email: "",
+         password: "",
+         status: "",
+         vehicleColor: "",
+         vehicleCapacity: "",
+         vehicleNumberPlate: "",
+         vehicleType: "",
+       });
+       const data = response.data
+       setCaptain(data.captain)
+       localStorage.setItem("token",data.token)
+       navigate("/homeCaptain")
+     }    
     // Add form submission logic here (API call, form validation, etc.)
   };
 
@@ -142,8 +170,8 @@ const CaptainRegister = () => {
               required
             >
               <option value="">Select Status</option>
-              <option value="available">Available</option>
-              <option value="unavailable">Unavailable</option>
+              <option value="available">Active</option>
+              <option value="unavailable">Inactive</option>
             </select>
           </div>
           <div className="grid grid-cols-2 gap-6">

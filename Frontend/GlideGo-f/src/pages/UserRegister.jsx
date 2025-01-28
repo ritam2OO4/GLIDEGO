@@ -44,8 +44,9 @@ const UserRegister = () => {
     );
     if (response.status === 201) {
       const data = response.data;
-      setUser(data.user);
-      navigate("/home");
+      setUser(data.user); 
+      localStorage.setItem("token",data.token)
+      navigate("/homeUser");
     }
 setFormData({
   fullName: {

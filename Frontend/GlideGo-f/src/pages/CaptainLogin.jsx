@@ -1,8 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import GlideGoPng from "../../public/GlideGoLogo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { captainDataContext } from "../context/captainContext";
 
 const CaptainLogin = () => {
+  const navigate = useNavigate() 
+  const {captain , setCaptain} = useContext(captainDataContext)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -16,14 +20,21 @@ const CaptainLogin = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      email: "",
-      password: "",
-    });
-    // Add login logic here (API call, form validation, etc.)
+
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`,formData)
+     if(response.status === 201) {
+       setFormData({
+         email: "",
+         password: "",
+       });
+       const data = response.data
+       setCaptain(data.captain)
+       localStorage.setItem("token",data.token)
+       navigate("/homeCaptain")
+     }    
+    // Add form submission logic here (API call, form validation, etc.)
   };
 
   return (
