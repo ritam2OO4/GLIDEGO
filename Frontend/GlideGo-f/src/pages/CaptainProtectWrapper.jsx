@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { userDataContext } from "../context/userContext";
+import { userDataContext } from "../context/UserContext.jsx";
 
 function UserProtectWrapper({ children }) {
   const { user, setUser } = useContext(userDataContext);
@@ -13,7 +13,7 @@ function UserProtectWrapper({ children }) {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/users/login");
+      navigate("/captains/login");
       return;
     }
 
@@ -33,12 +33,12 @@ function UserProtectWrapper({ children }) {
           setIsAuthenticated(true);
         } else {
           localStorage.removeItem("token");
-          navigate("/users/login");
+          navigate("/captains/login");
         }
       } catch (error) {
         console.error("Token validation failed:", error.message);
         localStorage.removeItem("token");
-        navigate("/users/login");
+        navigate("/captains/login");
       } finally {
         setIsLoading(false);
       }

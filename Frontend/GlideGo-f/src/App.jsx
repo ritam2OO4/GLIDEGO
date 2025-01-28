@@ -26,7 +26,8 @@ function App() {
     <Route path="/homeCaptain" element={ <CaptainProtectWrapper><HomeCaptain/></CaptainProtectWrapper>}></Route>
     <Route path="/users/logout" element={ <UserProtectWrapper><UserLogout/></UserProtectWrapper>}></Route>
     <Route path="/captains/logout" element={ <CaptainProtectWrapper><CaptainLogout/></CaptainProtectWrapper>}></Route>
-    <Route path="/riding" element={<Riding/>}></Route>
+    <Route path="/userRiding" element={<Riding/>}></Route>
+    <Route path="/captainRiding" element={<Riding/>}></Route>
    </Routes>
   )
 }
