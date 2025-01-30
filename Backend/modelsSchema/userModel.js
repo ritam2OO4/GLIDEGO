@@ -30,8 +30,6 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-// $2b$10$C7eRWtnaVTQ73wbF6aQddOt68fhqNyJRJ42GdcUfCMexRlp9f7EGq 
-// $2b$10$C7eRWtnaVTQ73wbF6aQddOt68fhqNyJRJ42GdcUfCMexRlp9f7EGq
 userSchema.methods.generateAuthToken = function (){
     const token = jwt.sign({id: this._id},process.env.JWT_SECRET,{expiresIn:"24h"})
     return token
