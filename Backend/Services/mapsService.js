@@ -39,25 +39,25 @@ const getAddressCoordinates = async (address) => {
 
 /**
  * Function to calculate the shortest route distance and time using OSRM
- * @param {string} origin - The starting address
+ * @param {string} pickUp - The starting address
  * @param {string} destination - The destination address
  * @returns {Promise<{distance: number, duration: string}>} - Distance (km) and duration (formatted as HH:MM)
  */
-const displacementTime = async (origin, destination) => {
+const displacementTime = async (pickUp, destination) => {
   try {
-    if (!origin || !destination) throw new Error("Both origin and destination are required");
+    if (!pickUp || !destination) throw new Error("Both pickUp and destination are required");
 
-    // Get coordinates for origin and destination
-    const originCoords = await getAddressCoordinates(origin);
+    // Get coordinates for pickUp and destination
+    const pickUpCoords = await getAddressCoordinates(pickUp);
     const destinationCoords = await getAddressCoordinates(destination);
 
     // Check if we received valid coordinates
-    if (!originCoords || !destinationCoords) {
+    if (!pickUpCoords || !destinationCoords) {
       throw new Error("Geocoding failed: Invalid coordinates received");
     }
 
     // Step 2: Get the shortest path using OSRM
-    const osrmUrl = `http://router.project-osrm.org/route/v1/driving/${originCoords.longitude},${originCoords.latitude};${destinationCoords.longitude},${destinationCoords.latitude}?overview=false`;
+    const osrmUrl = `http://router.project-osrm.org/route/v1/driving/${pickUpCoords.longitude},${pickUpCoords.latitude};${destinationCoords.longitude},${destinationCoords.latitude}?overview=false`;
 
     const response = await axios.get(osrmUrl);
 
@@ -66,16 +66,17 @@ const displacementTime = async (origin, destination) => {
 
       // Convert distance to kilometers
       const distanceKm = route.distance / 1000;
+      const durationMn = route.duration / 60;
 
       // Convert duration to hours and minutes
-      const totalMinutes = Math.round(route.duration / 60);
-      const hours = Math.floor(totalMinutes / 60);
-      const minutes = totalMinutes % 60;
-      const formattedDuration = `${hours}h ${minutes}m`;
+      // const totalMinutes = Math.round(route.duration / 60);
+      // const hours = Math.floor(totalMinutes / 60);
+      // const minutes = totalMinutes % 60;
+      // const formattedDuration = `${hours}h ${minutes}m`;
 
       return {
         distance: distanceKm.toFixed(2), // Keep 2 decimal places
-        duration: formattedDuration,
+        duration: durationMn,
         status: "OK"
       };
     } else {
