@@ -46,7 +46,7 @@ const ConfirmRidePopUp = (props) => {
                         <i className="ri-map-pin-user-fill"></i>
                         <div>
                             <h3 className='text-lg font-medium'>562/11-A</h3>
-                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickup}</p>
+                            <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickUp}</p>
                         </div>
                     </div>
                     <div className='flex items-center gap-5 p-3 border-b-2'>

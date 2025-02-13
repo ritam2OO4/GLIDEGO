@@ -2,11 +2,11 @@ import { useContext, useState } from "react";
 import GlideGoPng from "../../public/GlideGoLogo.png";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { captainDataContext } from "../context/captainContext";
+import { CaptainDataContext } from "../context/captainContext";
 
 const CaptainRegister = () => {
   const navigate = useNavigate();
-  const {captain , setCaptain} = useContext(captainDataContext)
+  const {captain , setCaptain} = useContext(CaptainDataContext)
   const [formData, setFormData] = useState({
     fullName:{
       firstName: "",

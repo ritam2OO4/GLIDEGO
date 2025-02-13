@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import LiveTracking from '../components/LiveTracking.jsx';
 
 const Home = () => {
-    const [ pickup, setPickup ] = useState('')
+    const [ pickUp, setPickUp ] = useState('')
     const [ destination, setDestination ] = useState('')
     const [ panelOpen, setPanelOpen ] = useState(false)
     const vehiclePanelRef = useRef(null)
@@ -27,7 +27,7 @@ const Home = () => {
     const [ confirmRidePanel, setConfirmRidePanel ] = useState(false)
     const [ vehicleFound, setVehicleFound ] = useState(false)
     const [ waitingForDriver, setWaitingForDriver ] = useState(false)
-    const [ pickupSuggestions, setPickupSuggestions ] = useState([])
+    const [ pickUpSuggestions, setPickUpSuggestions ] = useState([])
     const [ destinationSuggestions, setDestinationSuggestions ] = useState([])
     const [ activeField, setActiveField ] = useState(null)
     const [ fare, setFare ] = useState({})
@@ -58,17 +58,18 @@ const Home = () => {
     })
 
 
-    const handlePickupChange = async (e) => {
-        setPickup(e.target.value)
+    const handlePickUpChange = async (e) => {
+        setPickUp(e.target.value)
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/getSuggestions`, {
                 params: { input: e.target.value },
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
 
             })
-            setPickupSuggestions(response.data)
+            // console.log(response.data)
+            setPickUpSuggestions(response.data)
         } catch {
             // handle error
         }
@@ -77,7 +78,7 @@ const Home = () => {
     const handleDestinationChange = async (e) => {
         setDestination(e.target.value)
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`, {
+            const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/getSuggestions`, {
                 params: { input: e.target.value },
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -169,13 +170,12 @@ const Home = () => {
         setVehiclePanel(true)
         setPanelOpen(false)
 
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/get-fare`, {
-            params: { pickup, destination },
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/getFare`, {
+            params: { pickUp, destination },
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
-
 
         setFare(response.data)
 
@@ -183,8 +183,9 @@ const Home = () => {
     }
 
     async function createRide() {
+        console.log("hello")
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
-            pickup,
+            pickUp,
             destination,
             vehicleType
         }, {
@@ -192,7 +193,8 @@ const Home = () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
-
+        console.log("hello2")
+ console.log(response)
 
     }
 
@@ -218,10 +220,10 @@ const Home = () => {
                         <input
                             onClick={() => {
                                 setPanelOpen(true)
-                                setActiveField('pickup')
+                                setActiveField('pickUp')
                             }}
-                            value={pickup}
-                            onChange={handlePickupChange}
+                            value={pickUp}
+                            onChange={handlePickUpChange}
                             className='bg-[#eee] px-12 py-2 text-lg rounded-lg w-full'
                             type="text"
                             placeholder='Add a pick-up location'
@@ -245,10 +247,10 @@ const Home = () => {
                 </div>
                 <div ref={panelRef} className='bg-white h-0'>
                     <LocationSearchPanel
-                        suggestions={activeField === 'pickup' ? pickupSuggestions : destinationSuggestions}
+                        suggestions={activeField === 'pickUp' ? pickUpSuggestions : destinationSuggestions}
                         setPanelOpen={setPanelOpen}
                         setVehiclePanel={setVehiclePanel}
-                        setPickup={setPickup}
+                        setPickUp={setPickUp}
                         setDestination={setDestination}
                         activeField={activeField}
                     />
@@ -262,7 +264,7 @@ const Home = () => {
             <div ref={confirmRidePanelRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12'>
                 <ConfirmRide
                     createRide={createRide}
-                    pickup={pickup}
+                    pickUp={pickUp}
                     destination={destination}
                     fare={fare}
                     vehicleType={vehicleType}
@@ -272,7 +274,7 @@ const Home = () => {
             <div ref={vehicleFoundRef} className='fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12'>
                 <LookingForDriver
                     createRide={createRide}
-                    pickup={pickup}
+                    pickUp={pickUp}
                     destination={destination}
                     fare={fare}
                     vehicleType={vehicleType}

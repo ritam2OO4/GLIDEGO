@@ -1,17 +1,15 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { userDataContext } from "../context/UserContext.jsx";
+import { CaptainDataContext } from "../context/captainContext.jsx";
 
 function UserProtectWrapper({ children }) {
-  const { user, setUser } = useContext(userDataContext);
+  const { captain, setCaptain } = useContext(CaptainDataContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   useEffect(() => {
     const token = localStorage.getItem("token");
-
     if (!token) {
       navigate("/captains/login");
       return;
@@ -20,16 +18,15 @@ function UserProtectWrapper({ children }) {
     const validateToken = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}/users/profile`,
+          `${import.meta.env.VITE_BASE_URL}/captains/profile`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-
-        if (response.status === 200 && response.data.user) {
-          setUser(response.data.user);
+        if (response.status === 200 && response.data.captain) {
+          setCaptain(response.data.captain);
           setIsAuthenticated(true);
         } else {
           localStorage.removeItem("token");
@@ -45,7 +42,7 @@ function UserProtectWrapper({ children }) {
     };
 
     validateToken();
-  }, [navigate, setUser]);
+  }, [navigate, setCaptain, captain]);
 
   if (isLoading) return <div className="loading-spinner">Loading...</div>;
 

@@ -1,22 +1,31 @@
-import { createContext, useState } from "react";
+import { createContext, useState } from 'react';
 
-export const captainDataContext = createContext();
+export const CaptainDataContext = createContext();
 
-function CaptainContext({ children }) {
-  const [captain, setCaptain] = useState({
-    fullName: {
-      firstName: "",
-      lastName: "",
-    },
-    email: "",
-    password: "",
-  });
+const CaptainContext = ({ children }) => {
+    const [ captain, setCaptain ] = useState(null);
+    const [ isLoading, setIsLoading ] = useState(false);
+    const [ error, setError ] = useState(null);
 
-  return (
-    <captainDataContext.Provider value={{ captain, setCaptain }}>
-      {children}
-    </captainDataContext.Provider>
-  );
-}
+    const updateCaptain = (captainData) => {
+        setCaptain(captainData);
+    };
+
+    const value = {
+        captain,
+        setCaptain,
+        isLoading,
+        setIsLoading,
+        error,
+        setError,
+        updateCaptain
+    };
+
+    return (
+        <CaptainDataContext.Provider value={value}>
+            {children}
+        </CaptainDataContext.Provider>
+    );
+};
 
 export default CaptainContext;
