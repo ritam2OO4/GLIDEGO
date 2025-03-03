@@ -60,7 +60,7 @@ if(!errors.isEmpty()) return res.status(400).json({ errors: errors.array() }); /
 
     const token = captain.generateAuthToken()
     res.cookie("token",token)
-    res.status(201).json({ token, captain })
+    res.status("201").json({ token, captain })
   }
   catch(err){
     res.status("201").json({message:"invalid email or passsword!!"})
@@ -70,7 +70,7 @@ if(!errors.isEmpty()) return res.status(400).json({ errors: errors.array() }); /
 }
 
 module.exports.getCaptainProfile = async function(req,res,next){
-res.status("200").json(req.captain)
+         res.status("200").json({captain:req.captain})
 }
 
 module.exports.logoutCaptain=async function(req,res,next){

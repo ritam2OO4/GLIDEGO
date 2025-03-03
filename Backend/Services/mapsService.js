@@ -1,4 +1,5 @@
 const axios = require("axios");
+const captainModel = require("../modelsSchema/captainModel");
 
 /**
  * Function to get longitude and latitude for a given address using Nominatim
@@ -25,8 +26,8 @@ const getAddressCoordinates = async (address) => {
     if (response.status === 200 && response.data.length > 0) {
       const location = response.data[0]; // Get the most relevant result
       return {
-        latitude: parseFloat(location.lat),
-        longitude: parseFloat(location.lon),
+        ltd: parseFloat(location.lat),
+        lng: parseFloat(location.lon),
       };
     } else {
       throw new Error(`Geocoding failed: No results found or invalid response status`);
@@ -57,7 +58,7 @@ const displacementTime = async (pickUp, destination) => {
     }
 
     // Step 2: Get the shortest path using OSRM
-    const osrmUrl = `http://router.project-osrm.org/route/v1/driving/${pickUpCoords.longitude},${pickUpCoords.latitude};${destinationCoords.longitude},${destinationCoords.latitude}?overview=false`;
+    const osrmUrl = `http://router.project-osrm.org/route/v1/driving/${pickUpCoords.lng},${pickUpCoords.ltd};${destinationCoords.lng},${destinationCoords.ltd}?overview=false`;
 
     const response = await axios.get(osrmUrl);
 
@@ -123,4 +124,21 @@ const getLocationSuggestions = async (input)=>{
   }
 }
 
-module.exports = { getAddressCoordinates, displacementTime ,getLocationSuggestions };
+const getCaptainsInTheRadius = async (ltd, lng, radius) => {
+
+
+
+  const captains = await captainModel.find({
+      location: {
+          $geoWithin: {
+              $centerSphere: [ [ ltd, lng ], radius / 6371 ]    // radius in km
+
+          }
+      }
+  });
+  return captains;
+
+
+}
+
+module.exports = { getAddressCoordinates, displacementTime ,getLocationSuggestions ,getCaptainsInTheRadius};

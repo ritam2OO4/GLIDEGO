@@ -55,11 +55,11 @@ module.exports.loginUser = async (req, res, next) => {
 
     } catch (error) {
       // Catch unexpected errors and handle them
-      res.status("201").json({message:"invalid email or passsword!!"})
+      res.status(201).json({message:"invalid email or passsword!!"})
     }
   };
 module.exports.getUserProfile= async(req,res,next)=>{
- res.status("200").json(req.user) 
+ res.status(200).json(req.user) 
 }
 module.exports.logoutuser= async(req,res,next)=>{
   let token = req.cookies.token || req.headers.authorization?.split("")[1];
@@ -68,5 +68,5 @@ module.exports.logoutuser= async(req,res,next)=>{
 
 
   res.clearCookie("token")
-res.status("202").json({message:"logged Out!!"})
+res.status(202).json({message:"logged Out!!"})
 }

@@ -42,6 +42,15 @@ orderID:{
 signature:{
     type:String
 },
+distanceTime:{
+    distance:{
+        type:Number,
+    },
+    duration:{
+        type:String,
+    }
+}
+,
 otp:{
     type:String,
     select:false,

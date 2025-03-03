@@ -1,18 +1,49 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react'
+import { userDataContext } from '../context/UserContext.jsx'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
-function UserProtectWrapper({ children }) {
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+const UserProtectWrapper = ({
+    children
+}) => {
+    const token = localStorage.getItem('token')
+    const navigate = useNavigate()
+    const { user, setUser } = useContext(userDataContext)
+    const [ isLoading, setIsLoading ] = useState(true)
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/users/login");
+    useEffect(() => {
+        if (!token) {
+            navigate('/users/login')
+        }
+
+        axios.get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).then(response => {
+            if (response.status === 200) {
+                setUser(response.data)
+                setIsLoading(false)
+            }
+        })
+            .catch(err => {
+                console.log(err)
+                localStorage.removeItem('token')
+                navigate('/users/login')
+            })
+    }, [ token ])
+
+    if (isLoading) {
+        return (
+            <div>Loading...</div>
+        )
     }
-  }, [token, navigate]);
 
-  // Only render children if the token exists
-  return token ? <>{children}</> : null;
+    return (
+        <>
+            {children}
+        </>
+    )
 }
 
-export default UserProtectWrapper;
+export default UserProtectWrapper

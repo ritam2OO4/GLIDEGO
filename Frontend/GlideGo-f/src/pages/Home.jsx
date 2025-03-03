@@ -29,7 +29,7 @@ const Home = () => {
     const [ waitingForDriver, setWaitingForDriver ] = useState(false)
     const [ pickUpSuggestions, setPickUpSuggestions ] = useState([])
     const [ destinationSuggestions, setDestinationSuggestions ] = useState([])
-    const [ activeField, setActiveField ] = useState(null)
+    const [ activeField, setActiveField ] = useState("")
     const [ fare, setFare ] = useState({})
     const [ vehicleType, setVehicleType ] = useState(null)
     const [ ride, setRide ] = useState(null)
@@ -41,18 +41,15 @@ const Home = () => {
 
     useEffect(() => {
         socket.emit("join", { userType: "user", userId: user._id })
-    }, [ user ])
+    }, [ user ,socket])
 
     socket.on('ride-confirmed', ride => {
-
-
         setVehicleFound(false)
         setWaitingForDriver(true)
         setRide(ride)
     })
 
     socket.on('ride-started', ride => {
-        console.log("ride")
         setWaitingForDriver(false)
         navigate('/userRiding', { state: { ride } }) // Updated navigate to include ride data
     })
@@ -183,7 +180,6 @@ const Home = () => {
     }
 
     async function createRide() {
-        console.log("hello")
         const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/create`, {
             pickUp,
             destination,
@@ -193,19 +189,16 @@ const Home = () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
         })
-        console.log("hello2")
- console.log(response)
-
     }
 
     return (
         <div className='h-screen relative overflow-hidden'>
             <img className='w-16 absolute left-5 top-5' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" alt="" />
-            <div className='h-screen w-screen'>
+            <div className='h-screen w-screen relative z-[1]'>
                 {/* image for temporary use  */}
                 <LiveTracking />
             </div>
-            <div className=' flex flex-col justify-end h-screen absolute top-0 w-full'>
+            <div className=' flex flex-col justify-end h-screen absolute top-0 w-full z-[10]'>
                 <div className='h-[30%] p-6 bg-white relative'>
                     <h5 ref={panelCloseRef} onClick={() => {
                         setPanelOpen(false)

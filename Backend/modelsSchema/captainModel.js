@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const jwt = require("jsonwebtoken")
 const bcrrypt = require("bcrypt")
+const { Socket } = require("socket.io")
 
 
 const captainSchema = mongoose.Schema({
@@ -60,17 +61,20 @@ const captainSchema = mongoose.Schema({
              enum:["car","motorCycle","auto"]
          }
     },
-    loaction:{
-        lat:{
+    location:{
+        ltd:{
             type:Number
         },
         lng:{
             type:Number
         },
+    },
+    socketId:{
+        type:String,
     }
 })
 
-captainSchema.methods.generateAuthToken = function(password){
+captainSchema.methods.generateAuthToken = function(){
     return  jwt.sign({id:this._id},process.env.JWT_SECRET,{expiresIn:"24h"})
 }
 captainSchema.methods.comparePassword = async function(password){
@@ -80,5 +84,5 @@ captainSchema.methods.comparePassword = async function(password){
 captainSchema.statics.hashPassword = async function(password){
     return await bcrrypt.hash(password,10)
 }
-const captainModel = mongoose.model("captainModel",captainSchema)
+const captainModel = mongoose.model("captain",captainSchema)
 module.exports = captainModel

@@ -7,7 +7,7 @@ import LiveTracking from '../components/LiveTracking.jsx'
 
 const CaptainRiding = () => {
 
-    const [ finishRidePanel, setFinishRidePanel ] = useState(false)
+    const [finishRidePanel, setFinishRidePanel] = useState(false)
     const finishRidePanelRef = useRef(null)
     const location = useLocation()
     const rideData = location.state?.ride
@@ -24,7 +24,7 @@ const CaptainRiding = () => {
                 transform: 'translateY(100%)'
             })
         }
-    }, [ finishRidePanel ])
+    }, [finishRidePanel])
 
 
     return (
@@ -42,9 +42,8 @@ const CaptainRiding = () => {
                     setFinishRidePanel(true)
                 }}
             >
-                <h5 className='p-1 text-center w-[90%] absolute top-0' onClick={() => {
-
-                }}><i className="text-3xl text-gray-800 ri-arrow-up-wide-line"></i></h5>
+                <h5 className='p-1 text-center w-[90%] absolute top-0' onClick={() => { }}>
+                    <i className="text-3xl text-gray-800 ri-arrow-up-wide-line"></i></h5>
                 <h4 className='text-xl font-semibold'>{'4 KM away'}</h4>
                 <button className=' bg-green-600 text-white font-semibold p-3 px-10 rounded-lg'>Complete Ride</button>
             </div>
